@@ -437,19 +437,19 @@ class HomeContent extends StatelessWidget {
   List<Map<String, dynamic>> get upcomingEvents => const [
         {
           'name': 'Bisket Jatra',
-          'image': 'assets/image/bisket_jatra.jpg',
+          'image': 'assets/image/Bisket_Jatra_VIbes.jpg',
           'date': 'April 14-22, 2024',
           'location': 'Bhaktapur Durbar Square',
         },
         {
           'name': 'Gai Jatra',
-          'image': 'assets/image/gai_jatra.jpg',
+          'image': 'assets/image/gaijatra.png',
           'date': 'August 15, 2024',
           'location': 'Throughout Bhaktapur',
         },
         {
           'name': 'Indra Jatra',
-          'image': 'assets/image/indra_jatra.jpg',
+          'image': 'assets/image/indrajatra.png',
           'date': 'September 20, 2024',
           'location': 'Taumadhi Square',
         },
