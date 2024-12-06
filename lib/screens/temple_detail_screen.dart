@@ -1,90 +1,160 @@
-// lib/screens/temple_detail_screen.dart
 import 'package:flutter/material.dart';
 
 class TempleDetailScreen extends StatelessWidget {
   final String templeName;
   final String imageUrl;
+  final double rating;
+  final String description;
 
   const TempleDetailScreen({
     super.key,
     required this.templeName,
-    required this.imageUrl
+    required this.imageUrl,
+    required this.rating,
+    required this.description,
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(templeName),
-        backgroundColor: const Color(0xFF8B4513),
+        title: const Text('Details'),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.asset(
-              imageUrl,
-              width: double.infinity,
-              height: 300,
-              fit: BoxFit.cover,
+            // Temple Image
+            Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: const BorderRadius.vertical(
+                    bottom: Radius.circular(24),
+                  ),
+                  child: Image.asset(
+                    imageUrl,
+                    width: double.infinity,
+                    height: 250,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                Positioned(
+                  top: 16,
+                  right: 16,
+                  child: CircleAvatar(
+                    backgroundColor: Colors.white,
+                    child: IconButton(
+                      icon: const Icon(Icons.favorite_border),
+                      color: Colors.red,
+                      onPressed: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('$templeName added to favorites!')),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ],
             ),
+            const SizedBox(height: 16),
+
+            // Temple Name and Rating
             Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Row(
                 children: [
+                  const Icon(Icons.account_balance, color: Color(0xFF8B4513)),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      templeName,
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  const Icon(Icons.star, color: Colors.orange),
+                  const SizedBox(width: 4),
                   Text(
-                    templeName,
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    'Historical Significance',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
-                        'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      _buildInfoCard(Icons.access_time, 'Best Time', '6 AM - 6 PM'),
-                      _buildInfoCard(Icons.currency_rupee, 'Entry Fee', 'Rs. 1000'),
-                    ],
+                    rating.toString(),
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
             ),
-          ],
-        ),
-      ),
-    );
-  }
 
-  Widget _buildInfoCard(IconData icon, String title, String value) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Icon(icon, size: 30, color: const Color(0xFF8B4513)),
             const SizedBox(height: 8),
-            Text(
-              title,
-              style: const TextStyle(fontWeight: FontWeight.bold),
+
+            // Temple Description
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text(
+                description,
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey,
+                ),
+              ),
             ),
-            const SizedBox(height: 4),
-            Text(value),
+
+            const SizedBox(height: 24),
+
+            // Buttons for AR Experience and Audio Guide
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF8B4513),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        foregroundColor: Colors.white, // Set icon and text color to grey
+                      ),
+                      icon: const Icon(Icons.view_in_ar),
+                      label: const Text('Start AR Experience'),
+                      onPressed: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Launching AR Experience...'),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF8B4513),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        foregroundColor: Colors.white, // Set icon and text color to grey
+                      ),
+                      icon: const Icon(Icons.headset),
+                      label: const Text('Play Audio Guide'),
+                      onPressed: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Playing Audio Guide...'),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
