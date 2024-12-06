@@ -9,6 +9,8 @@ class CameraScreen extends StatefulWidget {
   _CameraScreenState createState() => _CameraScreenState();
 }
 
+
+
 class _CameraScreenState extends State<CameraScreen> {
   CameraController? _controller; // Make it nullable
   Future<void>? _initializeControllerFuture; // Make it nullable
