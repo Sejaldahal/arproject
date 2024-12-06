@@ -6,6 +6,10 @@ import 'screens/profile_screen.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'screens/temple_detail_screen.dart';
+import 'Events/bisketjatra.dart';
+
+import 'Events/gaijatra.dart';
+import 'Events/indrajatra.dart';
 
 void main() {
   runApp(const HistoryApp());
@@ -186,108 +190,111 @@ class _TempleCarouselState extends State<TempleCarousel> {
       ],
     );
   }
-  Widget _buildCarouselItem(int index) {
-  final temple = widget.temples[index];
-  final isCurrentPage = index == _currentPage;
 
-  return GestureDetector(
-    onTap: () {
-      Navigator.push(
-        context,
-        PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) => TempleDetailScreen(
-            templeName: temple['name']!,
-            imageUrl: temple['image']!,
-            description: temple['description']!,
-            rating: 4.7, // You can modify this or pass an actual rating if available
+  Widget _buildCarouselItem(int index) {
+    final temple = widget.temples[index];
+    final isCurrentPage = index == _currentPage;
+
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                TempleDetailScreen(
+              templeName: temple['name']!,
+              imageUrl: temple['image']!,
+              description: temple['description']!,
+              rating:
+                  4.7, // You can modify this or pass an actual rating if available
+            ),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return FadeTransition(
+                opacity: animation,
+                child: child,
+              );
+            },
           ),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            return FadeTransition(
-              opacity: animation,
-              child: child,
-            );
-          },
+        );
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOutQuint,
+        margin: EdgeInsets.symmetric(
+          horizontal: 8,
+          vertical: isCurrentPage ? 0 : 8,
         ),
-      );
-    },
-    child: AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeOutQuint,
-      margin: EdgeInsets.symmetric(
-        horizontal: 8,
-        vertical: isCurrentPage ? 0 : 8,
-      ),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.brown.withOpacity(0.2),
-            spreadRadius: 2,
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            Image.asset(
-              temple['image']!,
-              fit: BoxFit.cover,
-            ),
-            Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.transparent,
-                    Colors.black.withOpacity(0.7),
-                  ],
-                ),
-              ),
-            ),
-            Positioned(
-              bottom: 16,
-              left: 16,
-              right: 16,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    temple['name']!,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    temple['description']!,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: Colors.white.withOpacity(0.9),
-                      fontSize: 14,
-                    ),
-                  ),
-                ],
-              ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.brown.withOpacity(0.2),
+              spreadRadius: 2,
+              blurRadius: 8,
+              offset: const Offset(0, 4),
             ),
           ],
         ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              Image.asset(
+                temple['image']!,
+                fit: BoxFit.cover,
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Colors.transparent,
+                      Colors.black.withOpacity(0.7),
+                    ],
+                  ),
+                ),
+              ),
+              Positioned(
+                bottom: 16,
+                left: 16,
+                right: 16,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      temple['name']!,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      temple['description']!,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: Colors.white.withOpacity(0.9),
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 
   // Widget _buildCarouselItem(int index) {
   //   final temple = widget.temples[index];
   //   final isCurrentPage = index == _currentPage;
-
 
   //   return AnimatedContainer(
   //     duration: const Duration(milliseconds: 300),
@@ -648,42 +655,105 @@ class HomeContent extends StatelessWidget {
     );
   }
 
+  // Widget _buildUpcomingEventsSection() {
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       const Padding(
+  //         padding: EdgeInsets.symmetric(horizontal: 24.0),
+  //         child: Text(
+  //           'Upcoming Events',
+  //           style: TextStyle(
+  //             fontSize: 20,
+  //             fontWeight: FontWeight.bold,
+  //             color: Color(0xFF281202),
+  //           ),
+  //         ),
+  //       ),
   Widget _buildUpcomingEventsSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.0),
-          child: Text(
-            'Upcoming Events',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF281202),
-            ),
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 24.0),
+        child: Text(
+          'Upcoming Events',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF281202),
           ),
         ),
-        const SizedBox(height: 16),
-        ListView.builder(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: upcomingEvents.length,
-          itemBuilder: (context, index) {
-            final event = upcomingEvents[index];
-            return Container(
-              margin: const EdgeInsets.only(bottom: 16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.brown.withOpacity(0.1),
-                    blurRadius: 8,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
+      ),
+      const SizedBox(height: 16),
+      ListView.builder(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: upcomingEvents.length,
+        itemBuilder: (context, index) {
+          final event = upcomingEvents[index];
+          return GestureDetector(
+            onTap: () {
+              // Add navigation based on event name
+              Widget destinationScreen;
+              switch (event['name']) {
+                case 'Bisket Jatra':
+                  destinationScreen = const BisketJatraScreen();
+                  break;
+                case 'Gai Jatra':
+                  destinationScreen = const GaiJatraScreen();
+                  break;
+                case 'Indra Jatra':
+                  destinationScreen = const IndraJatraScreen();
+                  break;
+                default:
+                  return;
+              }
+
+              Navigator.push(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) => destinationScreen,
+                  transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                    return FadeTransition(
+                      opacity: animation,
+                      child: child,
+                    );
+                  },
+                ),
+              );
+            },
+            child: Container(
+//               // ... existing container code remains the same
+//             ),
+//           );
+//         },
+//       ),
+//     ],
+//   );
+// }
+        // const SizedBox(height: 16),
+        // ListView.builder(
+        //   padding: const EdgeInsets.symmetric(horizontal: 16),
+        //   shrinkWrap: true,
+        //   physics: const NeverScrollableScrollPhysics(),
+        //   itemCount: upcomingEvents.length,
+        //   itemBuilder: (context, index) {
+        //     final event = upcomingEvents[index];
+        //     return Container(
+        //       margin: const EdgeInsets.only(bottom: 16),
+        //       decoration: BoxDecoration(
+        //         color: Colors.white,
+        //         borderRadius: BorderRadius.circular(16),
+        //         boxShadow: [
+        //           BoxShadow(
+        //             color: Colors.brown.withOpacity(0.1),
+        //             blurRadius: 8,
+        //             offset: const Offset(0, 4),
+        //           ),
+        //         ],
+        //       ),
               child: Row(
                 children: [
                   ClipRRect(
@@ -750,6 +820,7 @@ class HomeContent extends StatelessWidget {
                   ),
                 ],
               ),
+            ),
             );
           },
         ),
