@@ -3,9 +3,9 @@ import 'screens/favorites_screen.dart';
 import 'screens/camera_screen.dart';
 import 'screens/location_screen.dart';
 import 'screens/profile_screen.dart';
-import 'screens/temple_detail_screen.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'screens/temple_detail_screen.dart';
 
 void main() {
   runApp(const HistoryApp());
@@ -186,12 +186,31 @@ class _TempleCarouselState extends State<TempleCarousel> {
       ],
     );
   }
-
   Widget _buildCarouselItem(int index) {
-    final temple = widget.temples[index];
-    final isCurrentPage = index == _currentPage;
+  final temple = widget.temples[index];
+  final isCurrentPage = index == _currentPage;
 
-    return AnimatedContainer(
+  return GestureDetector(
+    onTap: () {
+      Navigator.push(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) => TempleDetailScreen(
+            templeName: temple['name']!,
+            imageUrl: temple['image']!,
+            description: temple['description']!,
+            rating: 4.7, // You can modify this or pass an actual rating if available
+          ),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: animation,
+              child: child,
+            );
+          },
+        ),
+      );
+    },
+    child: AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeOutQuint,
       margin: EdgeInsets.symmetric(
@@ -261,8 +280,87 @@ class _TempleCarouselState extends State<TempleCarousel> {
           ],
         ),
       ),
-    );
-  }
+    ),
+  );
+}
+
+  // Widget _buildCarouselItem(int index) {
+  //   final temple = widget.temples[index];
+  //   final isCurrentPage = index == _currentPage;
+
+
+  //   return AnimatedContainer(
+  //     duration: const Duration(milliseconds: 300),
+  //     curve: Curves.easeOutQuint,
+  //     margin: EdgeInsets.symmetric(
+  //       horizontal: 8,
+  //       vertical: isCurrentPage ? 0 : 8,
+  //     ),
+  //     decoration: BoxDecoration(
+  //       borderRadius: BorderRadius.circular(20),
+  //       boxShadow: [
+  //         BoxShadow(
+  //           color: Colors.brown.withOpacity(0.2),
+  //           spreadRadius: 2,
+  //           blurRadius: 8,
+  //           offset: const Offset(0, 4),
+  //         ),
+  //       ],
+  //     ),
+  //     child: ClipRRect(
+  //       borderRadius: BorderRadius.circular(20),
+  //       child: Stack(
+  //         fit: StackFit.expand,
+  //         children: [
+  //           Image.asset(
+  //             temple['image']!,
+  //             fit: BoxFit.cover,
+  //           ),
+  //           Container(
+  //             decoration: BoxDecoration(
+  //               gradient: LinearGradient(
+  //                 begin: Alignment.topCenter,
+  //                 end: Alignment.bottomCenter,
+  //                 colors: [
+  //                   Colors.transparent,
+  //                   Colors.black.withOpacity(0.7),
+  //                 ],
+  //               ),
+  //             ),
+  //           ),
+  //           Positioned(
+  //             bottom: 16,
+  //             left: 16,
+  //             right: 16,
+  //             child: Column(
+  //               crossAxisAlignment: CrossAxisAlignment.start,
+  //               children: [
+  //                 Text(
+  //                   temple['name']!,
+  //                   style: const TextStyle(
+  //                     color: Colors.white,
+  //                     fontSize: 20,
+  //                     fontWeight: FontWeight.bold,
+  //                   ),
+  //                 ),
+  //                 const SizedBox(height: 8),
+  //                 Text(
+  //                   temple['description']!,
+  //                   maxLines: 2,
+  //                   overflow: TextOverflow.ellipsis,
+  //                   style: TextStyle(
+  //                     color: Colors.white.withOpacity(0.9),
+  //                     fontSize: 14,
+  //                   ),
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget _buildPageIndicator() {
     return Row(
