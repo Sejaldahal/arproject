@@ -54,6 +54,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  camera: ^0.10.0
   # cupertino_icons: ^1.0.2
   # video_player: ^2.5.0 # Use the latest version
 
